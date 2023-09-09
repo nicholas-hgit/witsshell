@@ -8,7 +8,9 @@
 #include <string.h>
 #include <assert.h>
 #include <fcntl.h>
+#include <stddef.h>
 #include <ctype.h>
+
 
 void removeSubString(char *str, const char *substring)
 {
@@ -24,31 +26,30 @@ void removeSubString(char *str, const char *substring)
     }
 }
 
-char *isExecutable(char *command, char *path[], int pathSize)
+// check is the command is executable
+// if it is not an executable return null otherwise return directory/
+char *isExecutable(char *command, char *path[], int *pathSize)
 {
-    char *buffer = NULL;
-    for (int i = 0; i < pathSize; i++)
+    char *directory = NULL;
+    for (int i = 0; i < *pathSize; i++)
     {
 
-        buffer = malloc(strlen(path[i]) + strlen(command) + 2);
-        if (buffer == NULL)
-        {
-            perror("malloc");
-            exit(1);
-        }
-        snprintf(buffer, strlen(path[i]) + strlen(command) + 2, "%s/%s", path[i], command);
+        directory = malloc(strlen(path[i]) + strlen(command) + 2);
+        snprintf(directory, strlen(path[i]) + strlen(command) + 2, "%s/%s", path[i], command);
 
-        if (access(buffer, X_OK) == 0)
+        if (access(directory, X_OK) == 0)
         {
-            removeSubString(buffer, command);
-            return buffer;
+            removeSubString(directory, command);
+            return directory;
         }
 
-        free(buffer);
+        free(directory);
     }
+
     return NULL;
 }
 
+// remove leading and trailing spaces
 char *trim(char *str)
 {
     size_t len = 0;
@@ -96,23 +97,97 @@ char *trim(char *str)
     return str;
 }
 
+// split the string according to a delimeter
 int split(char *command, char *delimiter, int index, char *array[])
 {
     char *string;
     while (true)
     {
+        // split and store individual strings in the array
         string = strsep(&command, delimiter);
-        array[index] = string;
-
         if (string == NULL)
             break;
+
+        if(strlen(string) == 0) continue;
+        array[index] = string;
         ++index;
     }
 
+    // return the number of strings in the array
     return index;
 }
 
+// terminate when receive the exit command
 bool terminate(char *command)
 {
     return (strcmp(command, "exit") == 0);
+}
+
+//change directory when the command is cd
+void changeToDirectory(char *directory, int numberOfArguments)
+{
+    if (numberOfArguments != 2 || chdir(directory) == -1)
+    {
+        char error_message[30] = "An error has occurred\n";
+        write(STDERR_FILENO, error_message, strlen(error_message));
+    }
+}
+
+//update the path variable
+//every path command overides the path
+//TODO: find a way to optimize instead of removing /
+void changePath(char *path[], char *arguments[],int commandLength, int *pathSize){
+    
+     bool isAbsolutePath = false;
+     
+     if(commandLength == 1){
+        for(int index = 0; index < *pathSize; ++index){
+            path[index] = NULL;
+        }
+        *pathSize = 0;
+        return;
+     }
+
+     *pathSize = 0;
+     char currentWorkingDirectory[1024];
+     getcwd(currentWorkingDirectory,sizeof(currentWorkingDirectory));
+
+     for(int index = 0; index < commandLength - 1; ++index){
+
+        char *argument = arguments[index + 1];
+         
+         // if there is a leading "/" then treat it as an absolute path
+        if (argument[0] == '/') {
+           isAbsolutePath = true;
+        }
+
+        // Remove trailing '/'
+        size_t argumentLength = strlen(argument);
+        if (argumentLength > 0 && argument[argumentLength - 1] == '/') {
+            argument[argumentLength - 1] = '\0';
+        }
+
+        
+        size_t directoryLength;
+        char * directory;
+
+        if(!isAbsolutePath){
+            // If it's a relative path, append it to the current working directory
+            directoryLength = strlen(currentWorkingDirectory) + 1 + strlen(argument) + 1;
+            directory = (char *)malloc(directoryLength);
+            snprintf(directory, directoryLength, "%s/%s", currentWorkingDirectory, argument);
+        }else{
+             // It's an absolute path
+            directoryLength = strlen(argument) + 1;
+            directory = (char *)malloc(directoryLength);
+            strcpy(directory, argument);
+        }
+
+         
+
+        snprintf(directory,directoryLength, "%s/", argument);
+
+        path[index] = directory;
+        ++ *pathSize;
+     }
 }
