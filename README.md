@@ -9,13 +9,13 @@ The shell supports two running modes, namely, interactive mode and batch mode
 
 ### Interactive mode
 In interactive mode, the shell is ran with no arguments, and allows the user to enter the commands directly. Here is the no arguments way
-```
+```bash
 prompt> ./witsshell
 witsshell> ls 
 ```
 ### Batch mode
 The shell also supports batch mode, which instead reads the commands from a batch file. Here is how you run the shell with a batch file named batch.txt
-```
+```bash
 prompt> ./witsshell  batch.txt
 ```
 
@@ -30,7 +30,7 @@ The <b>exit</b> command takes 0 arguments. Executing this command simply closes 
 The <b>cd</b> command always takes 1 argument, which is the directory that you want to change into.
 ### path
 The <b>path</b> command takes 0 or more arguments, with each argument separated by a whitespace from the others. A typical usage would be like this
-```
+```bash
 witsshell> path /bin/ /usr/bin/
 ```
 which would add /bin/ and /usr/bin/ to the search path of the shell. If path is executed with 0 arguments,
@@ -39,7 +39,7 @@ The path command always overwrites the old path with the newly specified path.
 
 ## Redirections
 The shell also supports redirection of standard input. This is achieved by the use of a special symbol ">". Fo example, the command
-```
+```bash
 witsshell> ls -la /tmp > output
 ```
 will print nothing on the screen. Instead, the standard output of the ls command will be rerouted to the "output" file. If the "output" file already exist,
@@ -48,7 +48,7 @@ are not supported.
 
 ## Parallel commands
 The shell also support the use of parallel commands. This is accomplished with the ampersand operator as follows.
-```
+```bash
 witsshell> cmd1 & cmd2 args1 args2 & cmd3 args1
 ```
 
