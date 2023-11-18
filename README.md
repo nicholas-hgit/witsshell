@@ -15,7 +15,9 @@ witsshell> ls
 ```
 ### Batch mode
 The shell also supports batch mode, which instead reads the commands from a batch file. Here is how you run the shell with a batch file named batch.txt
-```prompt> ./witsshell  batch.txt```
+```
+prompt> ./witsshell  batch.txt
+```
 
 ## Built-in commands
 When the shell receives a command, it checks if the command is a built-in command or not. If it is built-in, it invokes the implementation of the built-in command.
