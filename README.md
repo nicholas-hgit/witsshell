@@ -58,4 +58,4 @@ The one and only error message. The shell prints this one and only error message
 An error has occurred
 ```
 Although there is a difference between the errors that the shell catches and those that the program catches. The shell only catch the syntax errors. It does not
-worry about any program-related errors such as invalid arguments to ls when it is executed, in thus case, the program will print its own error and exit.
+worry about any program-related errors such as invalid arguments to ls when it is executed, in this case, the program will print its own error and exit.
