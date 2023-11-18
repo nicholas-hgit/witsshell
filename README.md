@@ -1,5 +1,5 @@
 # Basic Shell - witsshell
-In this university of witswatersrand assignment, I implemented a command line interpreter (CLI) or, as it is more commonly known, a shell.
+In this university of Witswatersrand assignment, I implemented a command line interpreter (CLI) or, as it is more commonly known, a shell.
 This basic shell, called witsshell, is basically an interactive loop: it repeatedly prints a prompt "witsshell> ". It then parses the input, execute the command
 specified on that line of input, and wait for the command to finish. This is repeated until the user types exit. The shell can only be invoked with either no argument
 or a single argument, everything else is an error.
