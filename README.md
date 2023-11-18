@@ -4,6 +4,8 @@ This basic shell, called witsshell, is basically an interactive loop: it repeate
 specified on that line of input, and wait for the command to finish. This is repeated until the user types exit. The shell can only be invoked with either no argument
 or a single argument, everything else is an error.
 
+<img src="exhibitions/witsshell.png"/>
+
 ## Modes
 The shell supports two running modes, namely, interactive mode and batch mode
 
