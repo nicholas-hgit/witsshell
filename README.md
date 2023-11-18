@@ -9,7 +9,7 @@ The shell supports two running modes, namely, interactive mode and batch mode
 
 ### Interactive mode
 In interactive mode, the shell is ran with no arguments, and allows the user to enter the commands directly. Here is the no arguments way
-```shell
+```bash
 prompt> ./witsshell
 witsshell> ls 
 ```
